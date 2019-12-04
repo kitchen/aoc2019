@@ -23,3 +23,20 @@ func HasPairedNumbers(number int) bool {
 	}
 	return false
 }
+
+func HasAnEvenPair(number int) bool {
+	nums := map[int]int{}
+	for number > 0 {
+		remainder := number % 10
+		nums[remainder]++
+		number /= 10
+	}
+
+	for _, v := range nums {
+		if v == 2 {
+			return true
+		}
+	}
+
+	return false
+}
