@@ -116,6 +116,18 @@ func (suite *day5Suite) TestComparators() {
 	suite.Equal(1001, output)
 }
 
+func (suite *day5Suite) TestArg() {
+	ops := []int{0, 4, 4, 4, 42}
+	suite.Equal(42, Arg(ops, 0, 1))
+	suite.Equal(42, Arg(ops, 0, 2))
+	suite.Equal(42, Arg(ops, 0, 3))
+
+	ops = []int{11100, 23, 34, 45, 42}
+	suite.Equal(23, Arg(ops, 0, 1))
+	suite.Equal(34, Arg(ops, 0, 2))
+	suite.Equal(45, Arg(ops, 0, 3))
+}
+
 func TestDay5Suite(t *testing.T) {
 	suite.Run(t, new(day5Suite))
 }
