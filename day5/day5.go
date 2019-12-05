@@ -77,6 +77,97 @@ func Run(ops []int, pos int, input int) ([]int, int, error) {
 
 		input = ops[pos1]
 		pos += 2
+	case 5:
+		var pos1, pos2 int
+		if mode1 == 1 {
+			pos1 = pos + 1
+		} else {
+			pos1 = ops[pos+1]
+		}
+
+		if mode2 == 1 {
+			pos2 = pos + 2
+		} else {
+			pos2 = ops[pos+2]
+		}
+
+		if ops[pos1] != 0 {
+			pos = ops[pos2]
+		} else {
+			pos += 3
+		}
+	case 6:
+		var pos1, pos2 int
+		if mode1 == 1 {
+			pos1 = pos + 1
+		} else {
+			pos1 = ops[pos+1]
+		}
+
+		if mode2 == 1 {
+			pos2 = pos + 2
+		} else {
+			pos2 = ops[pos+2]
+		}
+
+		if ops[pos1] == 0 {
+			pos = ops[pos2]
+		} else {
+			pos += 3
+		}
+	case 7:
+		var pos1, pos2, pos3 int
+		if mode1 == 1 {
+			pos1 = pos + 1
+		} else {
+			pos1 = ops[pos+1]
+		}
+
+		if mode2 == 1 {
+			pos2 = pos + 2
+		} else {
+			pos2 = ops[pos+2]
+		}
+
+		if mode3 == 1 {
+			pos3 = pos + 3
+		} else {
+			pos3 = ops[pos+3]
+		}
+
+		if ops[pos1] < ops[pos2] {
+			ops[pos3] = 1
+		} else {
+			ops[pos3] = 0
+		}
+		pos += 4
+	case 8:
+		var pos1, pos2, pos3 int
+		if mode1 == 1 {
+			pos1 = pos + 1
+		} else {
+			pos1 = ops[pos+1]
+		}
+
+		if mode2 == 1 {
+			pos2 = pos + 2
+		} else {
+			pos2 = ops[pos+2]
+		}
+
+		if mode3 == 1 {
+			pos3 = pos + 3
+		} else {
+			pos3 = ops[pos+3]
+		}
+
+		if ops[pos1] == ops[pos2] {
+			ops[pos3] = 1
+		} else {
+			ops[pos3] = 0
+		}
+		pos += 4
+
 	case 99:
 		return ops, input, nil
 	default:
