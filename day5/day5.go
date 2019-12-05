@@ -27,11 +27,7 @@ func Run(ops []int, pos int, input int) ([]int, int, error) {
 			pos2 = ops[pos+2]
 		}
 
-		if mode3 == 1 {
-			pos3 = pos + 3
-		} else {
-			pos3 = ops[pos+3]
-		}
+		pos3 = ops[pos+3]
 
 		ops[pos3] = ops[pos1] + ops[pos2]
 		pos += 4
@@ -49,11 +45,7 @@ func Run(ops []int, pos int, input int) ([]int, int, error) {
 			pos2 = ops[pos+2]
 		}
 
-		if mode3 == 1 {
-			pos3 = pos + 3
-		} else {
-			pos3 = ops[pos+3]
-		}
+		pos3 = ops[pos+3]
 
 		ops[pos3] = ops[pos1] * ops[pos2]
 		pos += 4
