@@ -66,3 +66,41 @@ func (graph *OrbitalDAG) Distances(vertex *dag.Vertex, distance int) int {
 	}
 	return distances
 }
+
+func (graph *OrbitalDAG) DistanceToAncestor(v *dag.Vertex, ancestor *dag.Vertex) int {
+	ancestors, err := graph.Ancestors(v)
+	if err != nil {
+		log.Fatal("htnshtnshnts")
+	}
+
+	for i, candidate := range ancestors {
+		if candidate == ancestor {
+			return i
+		}
+	}
+	log.Fatal("htnshtns")
+	return -1
+}
+
+func (graph *OrbitalDAG) FirstCommonAncestor(v1 *dag.Vertex, v2 *dag.Vertex) *dag.Vertex {
+	a1, err := graph.Ancestors(v1)
+	if err != nil {
+		log.Fatal("htns")
+	}
+
+	a2, err := graph.Ancestors(v2)
+	if err != nil {
+		log.Fatal("htns")
+	}
+
+	var common *dag.Vertex
+	for i := 1; i < len(a1); i++ {
+		if a1[len(a1)-i] != a2[len(a2)-i] {
+			return common
+		}
+		common = a1[len(a1)-i]
+	}
+
+	log.Fatal("htnshtnshns")
+	return common
+}
