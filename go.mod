@@ -7,6 +7,7 @@ require (
 	github.com/client9/misspell v0.3.4 // indirect
 	github.com/cosiner/argv v0.0.1 // indirect
 	github.com/go-delve/delve v1.3.2 // indirect
+	github.com/goombaio/dag v0.0.0-20181006234417-a8874b1f72ff
 	github.com/gordonklaus/ineffassign v0.0.0-20190601041439-ed7b1b5ee0f8 // indirect
 	github.com/kisielk/errcheck v1.2.0 // indirect
 	github.com/konsorten/go-windows-terminal-sequences v1.0.2 // indirect
