@@ -6,6 +6,28 @@ import (
 )
 
 func Run(ops []int, pos int, input []int) ([]int, []int, error) {
+
+	inputChan := make(chan int)
+	outputChan := make(chan int)
+	doneChan := make(chan bool)
+	var output []int
+	go RunWithChannels(ops, pos, inputChan, outputChan, doneChan)
+
+	for _, inputValue := range input {
+		inputChan <- inputValue
+	}
+	close(inputChan)
+
+	for outputValue := range outputChan {
+		output = append(output, outputValue)
+	}
+
+	<-doneChan
+
+	return ops, output, nil
+}
+
+func RunWithChannels(ops []int, pos int, input chan int, output chan int, done chan bool) error {
 	// fmt.Printf("program (pos: %v): %v\n", pos, ops)
 	op := ops[pos] % 100
 
@@ -19,13 +41,12 @@ func Run(ops []int, pos int, input []int) ([]int, []int, error) {
 		ops[ops[pos+3]] = Arg(ops, pos, 1) * Arg(ops, pos, 2)
 		pos += 4
 	case 3:
-		// fmt.Printf("%v = input -> %v\n", ops[pos:pos+2], ops[pos+1])
-		ops[ops[pos+1]] = input[0]
-		input = input[1:]
+		ops[ops[pos+1]] = <-input
+		fmt.Printf("%v = input (%v)-> %v\n", ops[pos:pos+2], ops[ops[pos+1]], ops[pos+1])
 		pos += 2
 	case 4:
-		// fmt.Printf("%v = output %v\n", ops[pos:pos+2], Arg(ops, pos, 1))
-		input = append(input, Arg(ops, pos, 1))
+		fmt.Printf("%v = output %v\n", ops[pos:pos+2], Arg(ops, pos, 1))
+		output <- Arg(ops, pos, 1)
 		pos += 2
 	case 5:
 		if Arg(ops, pos, 1) != 0 {
@@ -54,12 +75,15 @@ func Run(ops []int, pos int, input []int) ([]int, []int, error) {
 		}
 		pos += 4
 	case 99:
-		return ops, input, nil
+		fmt.Println("halting!")
+		close(output)
+		done <- true
+		return nil
 	default:
-		return nil, nil, fmt.Errorf("bad operation")
+		return fmt.Errorf("bad operation")
 	}
 
-	return Run(ops, pos, input)
+	return RunWithChannels(ops, pos, input, output, done)
 }
 
 func Arg(ops []int, pos int, arg int) int {
