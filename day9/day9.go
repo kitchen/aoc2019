@@ -107,7 +107,7 @@ func (c *Computer) Run() error {
 		c.relativeBase += c.Arg(1)
 		c.pos += 2
 	case 99:
-		fmt.Println("halting!")
+		// fmt.Println("halting!")
 		close(c.output)
 		c.done <- true
 		return nil
