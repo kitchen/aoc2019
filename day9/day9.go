@@ -52,7 +52,6 @@ func NewComputer(initMemory []int, initPos int, initRelative int, input chan int
 
 func (c *Computer) Run() error {
 	c.Iterations++
-	// fmt.Printf("program pos: %v\n", c.pos)
 	op := c.memory[c.pos] % 100
 
 	switch op {
@@ -66,10 +65,10 @@ func (c *Computer) Run() error {
 		c.pos += 4
 	case 3:
 		c.memory[c.ArgPos(1)] = <-c.input
-		// fmt.Printf("%v = input (%v)-> %v\n", c.memory[c.pos:c.pos+2], c.Arg(1), c.ArgPos(1))
+		// fmt.Printf("%v = input %v -> %v\n", c.memory[c.pos:c.pos+2], c.Arg(1), c.ArgPos(1))
 		c.pos += 2
 	case 4:
-		// fmt.Printf("%v = output %v\n", c.memory[c.pos:c.pos+2], c.Arg(1))
+		// fmt.Printf("%v = output %v\n", c.memory[c.pos:c.pos+2], c.Arg(1) )
 		c.output <- c.Arg(1)
 		c.pos += 2
 	case 5:
@@ -81,7 +80,6 @@ func (c *Computer) Run() error {
 		}
 	case 6:
 		// fmt.Printf("%v = zj %v -> %v / %v\n", c.memory[c.pos:c.pos+3], c.Arg(1), c.Arg(2), c.pos+3)
-
 		if c.Arg(1) == 0 {
 			c.pos = c.Arg(2)
 		} else {
@@ -89,7 +87,6 @@ func (c *Computer) Run() error {
 		}
 	case 7:
 		// fmt.Printf("%v = %v lt %v -> %v\n", c.memory[c.pos:c.pos+4], c.Arg(1), c.Arg(2), c.ArgPos(3))
-
 		if c.Arg(1) < c.Arg(2) {
 			c.memory[c.ArgPos(3)] = 1
 		} else {
