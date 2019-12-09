@@ -12,6 +12,7 @@ type Computer struct {
 	done         chan bool
 	relativeBase int
 	pos          int
+	Iterations   int
 }
 
 func Run(memory []int, pos int, input []int) ([]int, []int, error) {
@@ -46,10 +47,11 @@ func Run(memory []int, pos int, input []int) ([]int, []int, error) {
 func NewComputer(initMemory []int, initPos int, initRelative int, input chan int, output chan int, done chan bool) *Computer {
 	memory := make([]int, 100000)
 	copy(memory, initMemory)
-	return &Computer{memory: memory, input: input, output: output, pos: initPos, relativeBase: initRelative, done: done}
+	return &Computer{memory: memory, input: input, output: output, pos: initPos, relativeBase: initRelative, done: done, Iterations: 0}
 }
 
 func (c *Computer) Run() error {
+	c.Iterations++
 	// fmt.Printf("program pos: %v\n", c.pos)
 	op := c.memory[c.pos] % 100
 

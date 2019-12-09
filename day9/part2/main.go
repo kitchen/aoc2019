@@ -21,5 +21,6 @@ func main() {
 		fmt.Printf("output: %v\n", output)
 	}
 	<-doneChan
+	fmt.Printf("number of iterations: %v\n", computer.Iterations)
 
 }
