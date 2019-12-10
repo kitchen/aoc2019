@@ -1,7 +1,10 @@
 package day10
 
 import (
+	"fmt"
+	"log"
 	"math"
+	"math/cmplx"
 	"sort"
 	"strings"
 
@@ -72,6 +75,16 @@ func (g Grid) CandidateMap(source Point, to Point) string {
 	return g.DrawMap(colors)
 }
 
+func (g Grid) DrawMapByColor(colors map[string]Points) string {
+	colorMap := map[Point]string{}
+	for color, points := range colors {
+		for _, point := range points {
+			colorMap[point] = color
+		}
+	}
+	return g.DrawMap(colorMap)
+}
+
 func (g Grid) DrawMap(colors map[Point]string) string {
 	mapString := ""
 	maxX := 0
@@ -99,6 +112,49 @@ func (g Grid) DrawMap(colors map[Point]string) string {
 	return mapString
 }
 
+func (g Grid) ClosestVisible(source, to Point) *Point {
+	between := source.Between(to)
+	visible := between.Union(g.Points).SortByDistance(source)
+	if len(visible) > 0 {
+		return &visible[0]
+	}
+	return nil
+}
+
+func (g Grid) Delete(point Point) {
+	pointsMap := g.Points.Map()
+	delete(pointsMap, point)
+	g.Points = pointsMap.Slice()
+}
+
+func (g Grid) Zap(source Point, desired int) Points {
+	zappedPoints := make(Points, desired)
+	zapCount := 0
+	for {
+		visibleByAngle := g.VisibleSortedByAngle(source)
+		if len(visibleByAngle) == 0 {
+			log.Fatalf("ran out of points to zap at %v\n", zapCount)
+		}
+
+		for _, zapped := range visibleByAngle {
+			fmt.Printf("zapped %v\n", zapped)
+			zappedPoints[zapCount] = zapped
+			zapCount += 1
+			g.Delete(zapped)
+
+			if zapCount >= desired {
+				break
+			}
+		}
+
+		if zapCount >= desired {
+			break
+		}
+	}
+
+	return zappedPoints
+}
+
 func (g Grid) BestVisibility() (Point, int) {
 	var bestPoint Point
 	var bestVisible int
@@ -110,6 +166,15 @@ func (g Grid) BestVisibility() (Point, int) {
 		}
 	}
 	return bestPoint, bestVisible
+}
+
+func (g Grid) VisibleSortedByAngle(source Point) Points {
+	visible := g.VisibleFrom(source)
+	sort.Slice(visible, func(i, j int) bool {
+		return source.Angle(visible[i]) > source.Angle(visible[j])
+	})
+
+	return visible
 }
 
 type Points []Point
@@ -136,6 +201,13 @@ func (points Points) Map() PointsMap {
 func (points Points) SortByDistance(from Point) Points {
 	sort.Slice(points, func(i, j int) bool {
 		return points[i].Distance(from) < points[j].Distance(from)
+	})
+	return points
+}
+
+func (points Points) SortByPolar(from Point) Points {
+	sort.Slice(points, func(i, j int) bool {
+		return from.Angle(points[i]) < from.Angle(points[j])
 	})
 	return points
 }
@@ -200,4 +272,12 @@ func (p1 Point) Between(p2 Point) Points {
 
 func (p1 Point) Distance(p2 Point) int {
 	return int(math.Abs(float64(p1.X-p2.X) + math.Abs(float64(p1.Y-p2.Y))))
+}
+
+func (source Point) Angle(to Point) float64 {
+	// flipped X and Y to align the "up" such that this is sortable
+	x := to.X - source.X
+	y := to.Y - source.Y
+	_, theta := cmplx.Polar(complex(float64(y), float64(x)))
+	return theta
 }

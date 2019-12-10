@@ -1,7 +1,6 @@
 package day10
 
 import (
-	"fmt"
 	"regexp"
 	"testing"
 
@@ -163,7 +162,7 @@ func (suite *day10Suite) TestBlockers() {
 	visible := grid.VisibleFrom(point00)
 	suite.Equal(7, len(visible))
 
-	fmt.Printf("visibility map from 0,0\n%v", grid.VisibilityMap(point00))
+	// fmt.Printf("visibility map from 0,0\n%v", grid.VisibilityMap(point00))
 
 }
 
@@ -173,8 +172,44 @@ func (suite *day10Suite) TestCandidates() {
 	filler1 := NewPoint(20, 20)
 	grid := Grid{Points: Points{p1, p2, filler1}}
 
+	suite.Equal(3, len(grid.Points))
+
 	// fmt.Printf("visibility map from %v\n%v", p1, grid.VisibilityMap(p1))
-	fmt.Printf("candidate map from %v -> %v\n%v", p1, p2, grid.CandidateMap(p1, p2))
+	// fmt.Printf("candidate map from %v -> %v\n%v", p1, p2, grid.CandidateMap(p1, p2))
+}
+
+func (suite *day10Suite) TestZapper() {
+	exampleMap := `.#..##.###...#######
+##.############..##.
+.#.######.########.#
+.###.#######.####.#.
+#####.##.#.##.###.##
+..#####..#.#########
+####################
+#.####....###.#.#.##
+##.#################
+#####.##.###..####..
+..######..##.#######
+####.##.####...##..#
+.#####..#.######.###
+##...#.##########...
+#.##########.#######
+.####.#.###.###.#.##
+....##.##.###..#####
+.#.#.###########.###
+#.#.#.#####.####.###
+###.##.####.##.#..##`
+
+	grid := NewGrid(exampleMap)
+	source := NewPoint(11, 13)
+
+	zapped := grid.Zap(source, 200)
+	suite.Equal(NewPoint(11, 12), zapped[0], "first zapped")
+	suite.Equal(NewPoint(12, 1), zapped[1], "second zapped")
+	suite.Equal(NewPoint(12, 2), zapped[2], "third zapped")
+	suite.Equal(NewPoint(12, 8), zapped[9], "tenth zapped")
+	suite.Equal(NewPoint(8, 2), zapped[199], "200th zapped")
+
 }
 
 func TestDay10Suite(t *testing.T) {
