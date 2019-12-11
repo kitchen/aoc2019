@@ -7,8 +7,8 @@ import (
 )
 
 type Panel struct {
-	x int
-	y int
+	X int
+	Y int
 }
 
 type direction int
@@ -35,7 +35,7 @@ func NewShipPainter(program []int, originColor int) *ShipPainter {
 	outputChan := make(chan int)
 	doneChan := make(chan bool)
 	computer := day9.NewComputer(program, 0, 0, inputChan, outputChan, doneChan)
-	position := Panel{x: 0, y: 0}
+	position := Panel{X: 0, Y: 0}
 
 	go computer.Run()
 
@@ -94,13 +94,13 @@ func (sp *ShipPainter) Paint() bool {
 	cur := sp.position
 	switch sp.orientation {
 	case down:
-		sp.position = Panel{x: cur.x, y: cur.y + 1}
+		sp.position = Panel{X: cur.X, Y: cur.Y + 1}
 	case right:
-		sp.position = Panel{x: cur.x + 1, y: cur.y}
+		sp.position = Panel{X: cur.X + 1, Y: cur.Y}
 	case up:
-		sp.position = Panel{x: cur.x, y: cur.y - 1}
+		sp.position = Panel{X: cur.X, Y: cur.Y - 1}
 	case left:
-		sp.position = Panel{x: cur.x - 1, y: cur.y}
+		sp.position = Panel{X: cur.X - 1, Y: cur.Y}
 	}
 
 	fmt.Printf("moved to %v\n", sp.position)
